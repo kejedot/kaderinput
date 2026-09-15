@@ -1,3 +1,5 @@
+alert("Javascript aktif");
+
 const API =
 "https://script.google.com/macros/s/AKfycbzDoyMuJjoIYO3KO3e1KEo8whcj7Hyv_-QZu18gtz4PAu6cR3ZxD-_exYVzcvJ2JetByw/exec";
 
