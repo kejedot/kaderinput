@@ -6,38 +6,34 @@ const API =
 
 function kirim(){
 
-let data={
-
-nama:
-document.getElementById("nama").value,
-
-hp:
-document.getElementById("hp").value,
-
-lokasi:
-document.getElementById("lokasi").value,
-
-keterangan:
-document.getElementById("ket").value
-
-};
+    let data = {
+        nama: document.getElementById("nama").value,
+        hp: document.getElementById("hp").value,
+        lokasi: document.getElementById("lokasi").value,
+        keterangan: document.getElementById("ket").value
+    };
 
 
-fetch(API,{
+    fetch(API, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers:{
+            "Content-Type":"text/plain;charset=utf-8"
+        }
+    })
+    .then(response => response.json())
+    .then(result => {
 
-method:"POST",
+        console.log(result);
 
-body:JSON.stringify(data)
+        document.getElementById("hasil").innerHTML =
+        "Data berhasil disimpan";
 
-})
-
-.then(res=>res.json())
-
-.then(result=>{
-
-document.getElementById("hasil")
-.innerHTML="Data tersimpan";
-
-});
+    })
+    .catch(error=>{
+        console.log(error);
+        document.getElementById("hasil").innerHTML =
+        "Terjadi error";
+    });
 
 }
