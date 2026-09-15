@@ -100,12 +100,60 @@ function ambilGPS(){
 
 function kirim(){
 
-    let data = {
-        nama: document.getElementById("nama").value,
-        hp: document.getElementById("hp").value,
-        lokasi: document.getElementById("lokasi").value,
-        keterangan: document.getElementById("ket").value
-    };
+let data={
+
+nama: document.getElementById("nama").value,
+
+hp: document.getElementById("hp").value,
+
+latitude: document.getElementById("latitude").value,
+
+longitude: document.getElementById("longitude").value,
+
+lokasi: document.getElementById("lokasi").value,
+
+keterangan: document.getElementById("ket").value
+
+};
+
+
+console.log(data);
+
+
+fetch(API,{
+
+method:"POST",
+
+body:JSON.stringify(data),
+
+headers:{
+"Content-Type":"text/plain;charset=utf-8"
+}
+
+})
+
+.then(response=>response.json())
+
+.then(result=>{
+
+console.log(result);
+
+document.getElementById("hasil").innerHTML =
+"Data tersimpan";
+
+})
+
+.catch(error=>{
+
+console.log(error);
+
+document.getElementById("hasil").innerHTML =
+"Gagal mengirim data";
+
+});
+
+
+};
 
 
     fetch(API, {
