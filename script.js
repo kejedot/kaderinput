@@ -1,7 +1,16 @@
-alert("Javascript aktif");
+// ================================
+// URL GOOGLE APPS SCRIPT WEB APP
+// ================================
 
-const API =
-"https://script.google.com/macros/s/AKfycbzDoyMuJjoIYO3KO3e1KEo8whcj7Hyv_-QZu18gtz4PAu6cR3ZxD-_exYVzcvJ2JetByw/exec";
+const API = "https://script.google.com/macros/s/AKfycbzDoyMuJjoIYO3KO3e1KEo8whcj7Hyv_-QZu18gtz4PAu6cR3ZxD-_exYVzcvJ2JetByw/exec";
+
+
+let gpsReady = false;
+
+
+// ================================
+// AMBIL GPS OTOMATIS SAAT HALAMAN DIBUKA
+// ================================
 
 window.onload = function(){
 
@@ -10,12 +19,29 @@ window.onload = function(){
 };
 
 
+
+// ================================
+// FUNGSI AMBIL GPS
+// ================================
+
 function ambilGPS(){
 
-    if(navigator.geolocation){
+
+    if(!navigator.geolocation){
+
+        document.getElementById("gpsStatus").innerHTML =
+        "Browser tidak mendukung GPS";
+
+        return;
+
+    }
 
 
-        navigator.geolocation.getCurrentPosition(
+    document.getElementById("gpsStatus").innerHTML =
+    "Mengambil lokasi...";
+
+
+    navigator.geolocation.getCurrentPosition(
 
         function(position){
 
@@ -28,6 +54,11 @@ function ambilGPS(){
             position.coords.longitude;
 
 
+            let accuracy =
+            position.coords.accuracy;
+
+
+
             document.getElementById("latitude").value =
             latitude;
 
@@ -36,14 +67,23 @@ function ambilGPS(){
             longitude;
 
 
+
+            gpsReady = true;
+
+
+
             document.getElementById("gpsStatus").innerHTML =
-            "Lokasi berhasil didapat";
+            "✅ Lokasi berhasil didapat ("+
+            Math.round(accuracy)+
+            " meter)";
+
 
 
             console.log(
-              "GPS:",
-              latitude,
-              longitude
+                "GPS:",
+                latitude,
+                longitude,
+                accuracy
             );
 
 
@@ -52,173 +92,262 @@ function ambilGPS(){
 
         function(error){
 
-    let pesan = "";
 
-    switch(error.code){
-
-        case error.PERMISSION_DENIED:
-            pesan = "Izin lokasi ditolak";
-            break;
-
-        case error.POSITION_UNAVAILABLE:
-            pesan = "Lokasi tidak tersedia";
-            break;
-
-        case error.TIMEOUT:
-            pesan = "Waktu pengambilan GPS habis";
-            break;
-
-        default:
-            pesan = "Error tidak diketahui";
-    }
+            gpsReady = false;
 
 
-    document.getElementById("gpsStatus").innerHTML =
-    pesan;
+            let pesan;
 
-    console.log(error);
 
-},
+            switch(error.code){
+
+
+                case error.PERMISSION_DENIED:
+                    pesan =
+                    "Izin lokasi ditolak";
+                    break;
+
+
+                case error.POSITION_UNAVAILABLE:
+                    pesan =
+                    "Lokasi tidak tersedia";
+                    break;
+
+
+                case error.TIMEOUT:
+                    pesan =
+                    "Waktu GPS habis";
+                    break;
+
+
+                default:
+                    pesan =
+                    "GPS gagal";
+
+
+            }
+
+
+
+            document.getElementById("gpsStatus").innerHTML =
+            "❌ "+pesan;
+
+
+
+            console.log(error);
+
+
+        },
 
 
         {
-            enableHighAccuracy:true,
-            timeout:10000,
-            maximumAge:0
+
+            enableHighAccuracy:false,
+
+            timeout:30000,
+
+            maximumAge:60000
+
         }
 
+
+    );
+
+
+}
+
+
+
+
+// ================================
+// FUNGSI SIMPAN DATA
+// ================================
+
+
+function kirim(){
+
+
+
+    // cek GPS
+
+    if(!gpsReady){
+
+
+        alert(
+        "Lokasi belum tersedia. Tunggu GPS aktif."
         );
 
 
-    }else{
+        return;
 
-        alert("GPS tidak didukung browser");
 
     }
 
-}
-
-function kirim(){
-
-let tombol = document.getElementById("btnSimpan");
 
 
-// ubah tombol menjadi loading
-tombol.disabled = true;
-tombol.classList.add("loading");
-
-tombol.innerHTML =
-'<span class="spinner"></span> Menyimpan...';
+    let tombol =
+    document.getElementById("btnSimpan");
 
 
 
-let data={
+    // mode loading
 
-nama:
-document.getElementById("nama").value,
+    tombol.disabled = true;
 
-hp:
-document.getElementById("hp").value,
+    tombol.classList.add("loading");
 
-latitude:
-document.getElementById("latitude").value,
 
-longitude:
-document.getElementById("longitude").value,
-
-lokasi:
-document.getElementById("lokasi").value,
-
-keterangan:
-document.getElementById("ket").value
-
-};
+    tombol.innerHTML =
+    '<span class="spinner"></span> Menyimpan...';
 
 
 
-fetch(API,{
 
-method:"POST",
-
-body:JSON.stringify(data),
-
-headers:{
-"Content-Type":"text/plain;charset=utf-8"
-}
-
-})
+    let data = {
 
 
-.then(response=>response.json())
+
+        nama:
+        document.getElementById("nama").value,
 
 
-.then(result=>{
+
+        hp:
+        document.getElementById("hp").value,
 
 
-// berhasil
 
-tombol.disabled=false;
-
-tombol.classList.remove("loading");
-
-tombol.innerHTML="Simpan";
+        latitude:
+        document.getElementById("latitude").value,
 
 
-document.getElementById("hasil").innerHTML =
-"✅ Data berhasil disimpan";
+
+        longitude:
+        document.getElementById("longitude").value,
 
 
-})
+
+        lokasi:
+        document.getElementById("lokasi").value,
 
 
-.catch(error=>{
+
+        keterangan:
+        document.getElementById("ket").value
 
 
-// gagal
 
-tombol.disabled=false;
-
-tombol.classList.remove("loading");
-
-tombol.innerHTML="Simpan";
+    };
 
 
-document.getElementById("hasil").innerHTML =
-"❌ Gagal menyimpan data";
 
 
-console.log(error);
+    console.log(
+        "Data dikirim:",
+        data
+    );
 
 
-});
 
 
-}
-
-function kirim(){
+    fetch(API,{
 
 
-let lat =
-document.getElementById("latitude").value;
+        method:"POST",
 
 
-let lon =
-document.getElementById("longitude").value;
+
+        body:
+        JSON.stringify(data),
 
 
-if(lat=="" || lon==""){
 
-alert("Lokasi belum tersedia, tunggu GPS aktif");
-
-return;
-
-let accuracy =
-position.coords.accuracy;
-
-}
+        headers:{
 
 
-// lanjut kirim data
+            "Content-Type":
+            "text/plain;charset=utf-8"
+
+
+        }
+
+
+
+    })
+
+
+
+    .then(response=>response.json())
+
+
+
+    .then(result=>{
+
+
+
+        console.log(result);
+
+
+
+
+        tombol.disabled=false;
+
+
+        tombol.classList.remove("loading");
+
+
+        tombol.innerHTML="Simpan";
+
+
+
+        document.getElementById("hasil").innerHTML =
+        "✅ Data berhasil disimpan";
+
+
+
+        // reset form
+
+        document.getElementById("formInput").reset();
+
+
+
+        // ambil GPS ulang
+
+        gpsReady=false;
+
+        ambilGPS();
+
+
+
+    })
+
+
+
+    .catch(error=>{
+
+
+
+        console.log(error);
+
+
+
+        tombol.disabled=false;
+
+
+        tombol.classList.remove("loading");
+
+
+        tombol.innerHTML="Simpan";
+
+
+
+        document.getElementById("hasil").innerHTML =
+        "❌ Data gagal disimpan";
+
+
+
+    });
+
 
 
 }
