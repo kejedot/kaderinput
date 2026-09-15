@@ -52,13 +52,33 @@ function ambilGPS(){
 
         function(error){
 
-            document.getElementById("gpsStatus").innerHTML =
-            "GPS gagal diambil";
+    let pesan = "";
+
+    switch(error.code){
+
+        case error.PERMISSION_DENIED:
+            pesan = "Izin lokasi ditolak";
+            break;
+
+        case error.POSITION_UNAVAILABLE:
+            pesan = "Lokasi tidak tersedia";
+            break;
+
+        case error.TIMEOUT:
+            pesan = "Waktu pengambilan GPS habis";
+            break;
+
+        default:
+            pesan = "Error tidak diketahui";
+    }
 
 
-            console.log(error);
+    document.getElementById("gpsStatus").innerHTML =
+    pesan;
 
-        },
+    console.log(error);
+
+},
 
 
         {
