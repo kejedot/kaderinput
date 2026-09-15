@@ -1,42 +1,162 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
+
 <head>
-<title>Input Data</title>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Form Input Data</title>
+
+
 <link rel="stylesheet" href="style.css">
+
+
 </head>
+
 
 <body>
 
-  <input type="hidden" id="latitude">
-<input type="hidden" id="longitude">
-
-
-<p id="gpsStatus">
-</p>
 
 <div class="container">
 
-<h2>Form Input</h2>
 
-<input id="nama" placeholder="Nama">
-
-<input id="hp" placeholder="Nomor HP">
-
-<input id="lokasi" placeholder="Lokasi">
-
-<textarea id="ket" placeholder="Keterangan"></textarea>
+<div class="card">
 
 
-<button id="btnSimpan" onclick="kirim()">
-    Simpan
-</button>
+<h2>
+Form Input Data
+</h2>
 
-<p id="hasil"></p>
+
+<p class="subtitle">
+Silakan isi data berikut
+</p>
+
+
+
+
+<form id="formInput">
+
+
+<label>
+Nama
+</label>
+
+<input 
+type="text" 
+id="nama"
+placeholder="Masukkan nama"
+required>
+
+
+
+
+<label>
+Nomor HP
+</label>
+
+
+<input 
+type="tel"
+id="hp"
+placeholder="Masukkan nomor HP"
+required>
+
+
+
+
+<label>
+Lokasi / Alamat
+</label>
+
+
+<input 
+type="text"
+id="lokasi"
+placeholder="Masukkan lokasi"
+>
+
+
+
+
+<label>
+Keterangan
+</label>
+
+
+<textarea
+id="ket"
+placeholder="Masukkan keterangan">
+</textarea>
+
+
+
+
+<!-- GPS otomatis -->
+
+<input 
+type="hidden"
+id="latitude">
+
+
+<input 
+type="hidden"
+id="longitude">
+
+
+
+
+<div class="gps-box">
+
+
+📍 Status GPS:
+
+<span id="gpsStatus">
+Mengambil lokasi...
+</span>
+
 
 </div>
 
 
+
+
+<button 
+type="button"
+id="btnSimpan"
+onclick="kirim()">
+
+
+Simpan
+
+
+</button>
+
+
+
+<p 
+id="hasil"
+class="hasil">
+</p>
+
+
+
+</form>
+
+
+</div>
+
+
+</div>
+
+
+
+
 <script src="script.js"></script>
 
+
 </body>
+
 </html>
