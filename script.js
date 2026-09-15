@@ -100,24 +100,40 @@ function ambilGPS(){
 
 function kirim(){
 
+let tombol = document.getElementById("btnSimpan");
+
+
+// ubah tombol menjadi loading
+tombol.disabled = true;
+tombol.classList.add("loading");
+
+tombol.innerHTML =
+'<span class="spinner"></span> Menyimpan...';
+
+
+
 let data={
 
-nama: document.getElementById("nama").value,
+nama:
+document.getElementById("nama").value,
 
-hp: document.getElementById("hp").value,
+hp:
+document.getElementById("hp").value,
 
-latitude: document.getElementById("latitude").value,
+latitude:
+document.getElementById("latitude").value,
 
-longitude: document.getElementById("longitude").value,
+longitude:
+document.getElementById("longitude").value,
 
-lokasi: document.getElementById("lokasi").value,
+lokasi:
+document.getElementById("lokasi").value,
 
-keterangan: document.getElementById("ket").value
+keterangan:
+document.getElementById("ket").value
 
 };
 
-
-console.log(data);
 
 
 fetch(API,{
@@ -132,51 +148,50 @@ headers:{
 
 })
 
+
 .then(response=>response.json())
+
 
 .then(result=>{
 
-console.log(result);
+
+// berhasil
+
+tombol.disabled=false;
+
+tombol.classList.remove("loading");
+
+tombol.innerHTML="Simpan";
+
 
 document.getElementById("hasil").innerHTML =
-"Data tersimpan";
+"✅ Data berhasil disimpan";
+
 
 })
 
+
 .catch(error=>{
+
+
+// gagal
+
+tombol.disabled=false;
+
+tombol.classList.remove("loading");
+
+tombol.innerHTML="Simpan";
+
+
+document.getElementById("hasil").innerHTML =
+"❌ Gagal menyimpan data";
+
 
 console.log(error);
 
-document.getElementById("hasil").innerHTML =
-"Gagal mengirim data";
 
 });
 
-
-};
-
-
-    fetch(API, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers:{
-            "Content-Type":"text/plain;charset=utf-8"
-        }
-    })
-    .then(response => response.json())
-    .then(result => {
-
-        console.log(result);
-
-        document.getElementById("hasil").innerHTML =
-        "Data berhasil disimpan";
-
-    })
-    .catch(error=>{
-        console.log(error);
-        document.getElementById("hasil").innerHTML =
-        "Terjadi error";
-    });
 
 }
 
