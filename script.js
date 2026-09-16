@@ -47,11 +47,11 @@ function ambilGPS(){
 
 
             let latitude =
-            position.coords.latitude;
+            position.coords.latitude.toFixed(6);
 
 
             let longitude =
-            position.coords.longitude;
+            position.coords.longitude.toFixed(6);
 
 
             let accuracy =
